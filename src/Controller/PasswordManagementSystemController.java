@@ -11,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import Views.PasswordManagementView;
@@ -60,15 +62,15 @@ public class PasswordManagementSystemController {
     	passwordList = loadAllPasswords(passwordList);
     	
     	while(!wantToStop){
-    		passwordList = loadAllPasswords(passwordList);
+    		
     		PasswordManagementView passView = new PasswordManagementView(user,passwordList);
-    	    	    		
+//    		System.out.println("passView.chosenOpption "+passView.chosenOpption+" passView.passwordTypeOpption "+passView.passwordTypeOpption);
     		switch (passView.chosenOpption) {
     		case 1:
     			// Add the password details
     			switch (passView.passwordTypeOpption) {
         			case 1:
-        				
+        				passwordList = loadAllPasswords(passwordList);
         				PasswordManagementFactory websiteFactory = new WebsiteFactory();
         				PasswordManagement websitePassword = websiteFactory.createPassword(passView.name, passView.password, passView.dateOfCreate, passView.dateOfUpdate, passView.user, passView.type, passView.websiteName, passView.websiteLink, passView.desktopApplication, passView.gameName, passView.gameDeveloper);
         				passwordList.add(websitePassword);
@@ -81,7 +83,7 @@ public class PasswordManagementSystemController {
         				}
         				break;
         			case 2:
-        				
+        				passwordList = loadAllPasswords(passwordList);
         				PasswordManagementFactory deskApplicationFactory = new DesktopApplicationPasswordFactory();
         				PasswordManagement deskApplicationPassword = deskApplicationFactory.createPassword(passView.name, passView.password, passView.dateOfCreate, passView.dateOfUpdate, passView.user, passView.type, passView.websiteName, passView.websiteLink, passView.desktopApplication, passView.gameName, passView.gameDeveloper);
         				passwordList.add(deskApplicationPassword);
@@ -94,7 +96,7 @@ public class PasswordManagementSystemController {
         				}
         				break;
         			case 3:
-        				
+        				passwordList = loadAllPasswords(passwordList);
         				PasswordManagementFactory gameFactory = new GamePasswordFactory();
         				PasswordManagement gamePassword = gameFactory.createPassword(passView.name, passView.password, passView.dateOfCreate, passView.dateOfUpdate, passView.user, passView.type, passView.websiteName, passView.websiteLink, passView.desktopApplication, passView.gameName, passView.gameDeveloper);
         				passwordList.add(gamePassword);
@@ -114,8 +116,8 @@ public class PasswordManagementSystemController {
     		case 2:
     			
     			switch (passView.passwordTypeOpption) {
-    			case 1:
-    				
+    				case 1:
+    				passwordList = loadAllPasswords(passwordList);
     				for (int i = 0; i < passwordList.size(); i++) {
     					if(passwordList.get(i).getType().toLowerCase().equals(passView.type)){
     			    		    			    		
@@ -145,7 +147,9 @@ public class PasswordManagementSystemController {
     					}
     				}
     				break;
-    			case 2:
+    				
+    				case 2:
+    				passwordList = loadAllPasswords(passwordList);	
     				for (int i = 0; i < passwordList.size(); i++) {
     					if(passwordList.get(i).getType().toLowerCase().equals(passView.type)) {
     			    		    			    		
@@ -174,7 +178,10 @@ public class PasswordManagementSystemController {
     					}
     				}
     				break;
-    			case 3:
+    				
+    				case 3:
+    				passwordList = loadAllPasswords(passwordList);
+    				
     				for (int i = 0; i < passwordList.size(); i++) {
     					if(passwordList.get(i).getType().toLowerCase().equals(passView.type)){
     			    		    			    		
@@ -204,17 +211,115 @@ public class PasswordManagementSystemController {
     					}
     				}
     				break;
-    			default:
-    				System.out.println(" ");
-			}
+    				
+    				default:
+    					System.out.println(" ");
+    			}
+    			
     			break;
+    			
     		case 3:
-            
+    			switch(passView.passwordTypeOpption) {
+    			case 1:
+    				passwordList = loadAllPasswords(passwordList);
+    				System.out.println("The "+passView.type+" passwords details that will be delete form system is "+passView.deleteSearchByName);
+    				for (int i = 0; i < passwordList.size(); i++) {
+    					if(passwordList.get(i).getType().toLowerCase().equals(passView.type)){
+    			    		
+    						PasswordManagement passManager = passwordList.get(i);
+    						String targetName = ((Website)passManager).getWebsiteName().toLowerCase();
+    						String sourceName = passView.deleteSearchByName.toLowerCase();
+    						
+    						if( ((Website)passwordList.get(i)).getWebsiteName().toLowerCase().equals(passView.deleteSearchByName)) {
+    							
+    							passwordList.remove(i);       						
+    								       						
+        						isPasswordSave = SaveAllPasswords(passwordList);
+                				if(isPasswordSave) {
+                					System.out.println("Password details has been Deleted");	
+                				}
+                				else {
+                					System.out.println("Unable to update!!");
+                				}
+    						}
+    					    						
+    					}
+    				}
+    				break;
+    			case 2:
+    				passwordList = loadAllPasswords(passwordList);
+    				System.out.println("The "+passView.type+" application passwords details that will be delete form system is "+passView.deleteSearchByName);
+    				for (int i = 0; i < passwordList.size(); i++) {
+    					if(passwordList.get(i).getType().toLowerCase().equals(passView.type)){
+    						
+    						PasswordManagement passManager = passwordList.get(i);
+    						String targetName = ((DesktopApplication)passManager).getApplicationName().toLowerCase();
+    						String sourceName = passView.deleteSearchByName.toLowerCase();
+    						
+    						if(targetName.equals(sourceName)) {
+    							
+    							passwordList.remove(i);       						
+    											
+        						isPasswordSave = SaveAllPasswords(passwordList);
+                				if(isPasswordSave) {
+                					System.out.println("Password details has been Deleted");	
+                				}
+                				else {
+                					System.out.println("Unable to update!!");
+                				}
+    						}
+    					    						
+    					}
+    				}
+    				break;
+    			case 3:
+    				passwordList = loadAllPasswords(passwordList);
+    				System.out.println("The "+passView.type+" passwords details that will be delete form system is "+passView.deleteSearchByName);
+    				for (int i = 0; i < passwordList.size(); i++) {
+    					if(passwordList.get(i).getType().toLowerCase().equals(passView.type)){
+    			    		
+    						PasswordManagement passManager = passwordList.get(i);
+    						String targetName = ((Game)passManager).getGameName().toLowerCase();
+    						String sourceName = passView.deleteSearchByName.toLowerCase();
+    						
+    						if( ((Game)passwordList.get(i)).getGameName().toLowerCase().equals(passView.deleteSearchByName)) {
+    							
+    							passwordList.remove(i);       						
+    											
+        						isPasswordSave = SaveAllPasswords(passwordList);
+                				if(isPasswordSave) {
+                					System.out.println("Password details has been Deleted");	
+                				}
+                				else {
+                					System.out.println("Unable to update!!");
+                				}
+    						}
+    					    						
+    					}
+    				}
+    				break;
+    			default:
+    				System.out.println("");
+    			}
     			break;
     		case 4:
     			break;
     		
     		case 5:
+    			//For search
+    			break;
+    			
+    		case 6:
+    			//For Sorting
+//    			// Sort the passwordList based on the last update date
+//    	        Collections.sort(passwordList, (password1, password2) -> 
+//    	                password2.getDateOfUpdate().compareTo(password1.getDateOfUpdate()));
+    			
+    			// Sort the passwordList based on the last update date in descending order
+    	        Collections.sort(passwordList, Comparator.comparing(PasswordManagement::getDateOfUpdate).reversed());
+    			break;
+    			
+    		case 7:
     			if(passView.wellstop) {
     				//before close this application save it to file.
     			
@@ -236,6 +341,7 @@ public class PasswordManagementSystemController {
 
     	            System.out.println(); // Separator between passwords
     	        }
+    	        
     			break;
     		default:
     			System.out.println(" ");

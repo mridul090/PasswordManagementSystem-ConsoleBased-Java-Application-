@@ -29,7 +29,12 @@ public class PasswordManagementView {
 	
 	//For update
 	public String updatesearchByName = "";
-
+	
+	//For delete
+	public String deleteSearchByName = "";
+	
+	//For search
+	public String SearchByName = "";
 	
 	public int chosenOpption;
 	public int passwordTypeOpption;
@@ -47,11 +52,17 @@ public class PasswordManagementView {
 			System.out.println(" 3 . Delete");
 			System.out.println(" 4 . Display All");
 			System.out.println(" 5 . Search");
-			System.out.println(" 6 . Stop");
+			System.out.println(" 6 . Sort Passwords");
+			System.out.println(" 7 . Stop");
+			
+			int opption;
+			PasswordManagement searchAPassword;
+			
 			this.chosenOpption = insert.nextInt();
 			insert.nextLine();
-			
+								
 			switch (this.chosenOpption) {
+//				Case for add
 		    	case 1:
 		    		// Code to be executed if expression matches value1
 		    		System.out.println(" Please chose an opption's to add a specific types of password");
@@ -60,6 +71,8 @@ public class PasswordManagementView {
 		    		System.out.println(" 3. Game");
 		    		this.passwordTypeOpption = insert.nextInt();
 					insert.nextLine();
+					
+					
 					switch (this.passwordTypeOpption) {
 			    		case 1:
 			    			System.out.println(" Please write down name, passwrod,website name, website link");
@@ -98,7 +111,7 @@ public class PasswordManagementView {
 					}
 		    		
 		    		break;
-		    	
+//		    	case for update
 		    	case 2:
 		    		// Code to be executed if expression matches value1
 		    		System.out.println(" Please chose an opption's to Update a specific types of password");
@@ -108,9 +121,7 @@ public class PasswordManagementView {
 		    		this.passwordTypeOpption = insert.nextInt();
 					insert.nextLine();
 					
-					int opption;
-					PasswordManagement searchAPassword;
-					
+					try {
 					switch (this.passwordTypeOpption) {
 		    		case 1:
 		    			System.out.println(" Please write down website name");
@@ -275,20 +286,71 @@ public class PasswordManagementView {
 			    	default:
 			    		System.out.println(" you have chosen an invalid opptions");
 					}
+					}
+					catch(Exception e){
+						System.out.println(e.getStackTrace());
+					}
 					
 		    		break;
 		    		
+//		    	case for delete
 		    	case 3:
-		    		// Code to be executed if expression matches value2
+		    		// Code to be executed if expression matches value1
+		    		System.out.println(" Please chose an opption's to Delete a specific types of password");
+		    		System.out.println(" 1. Website");
+		    		System.out.println(" 2. Desktop Application");
+		    		System.out.println(" 3. Game");
+		    		this.passwordTypeOpption = insert.nextInt();
+					insert.nextLine();
+					
+					switch (this.passwordTypeOpption) {
+					case 1:
+						System.out.println(" Please write down the name of website that you want to delete!");
+						this.deleteSearchByName = insert.nextLine();
+						searchAPassword = search(this.deleteSearchByName, passwordList);
+						this.type = searchAPassword.getType();
+						
+						break;
+					case 2:
+						System.out.println(" Please write down the name of Desktop Application that you want to delete!");
+						this.deleteSearchByName = insert.nextLine();
+						searchAPassword = search(this.deleteSearchByName, passwordList);
+						this.type = searchAPassword.getType();
+						break;
+					case 3:
+						System.out.println(" Please write down the name of Game that you want to delete!");
+						this.deleteSearchByName = insert.nextLine();
+						searchAPassword = search(this.deleteSearchByName, passwordList);
+						this.type = searchAPassword.getType();
+						break;
+					default:
+						System.out.println("");
+						
+					}
+		    		
 		    		break;
 		    		
+//		    	case for display
 		    	case 4:
 		    		displayAllPasswordDetails(passwordList,user);
 		    		break;
-		    	case 5:
 		    		
+//		    	case for search
+		    	case 5:		
+		    		System.out.println(" Please write down the name of Website/DeskTop Application/Game that passwords details "
+		    				+ "you are looking for.");
+	    			this.SearchByName = insert.nextLine();
+	    			searchAPassword = search(this.SearchByName, passwordList);
+	    			displaySinglePasswordDetails(searchAPassword);
 		    		break;
-		    	case 6:
+		    		
+//			    case for sort
+			    case 6:
+			    	
+			    	break;
+			    	
+//		    	case for stop
+		    	case 7:
 		    		this.wellstop = true;
 		    		break;
 		    	default:
@@ -355,7 +417,9 @@ public class PasswordManagementView {
 	    	             ((DesktopApplication) password).displayApplicationInfo();
 	    	        } else if (password instanceof Game) {
 	    	             ((Game) password).displayGameInfo();
-	    	        }					 
+	    	        }
+	    	        
+	    	        System.out.println("\t");
 				 }
 			 }
 			

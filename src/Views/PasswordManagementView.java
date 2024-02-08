@@ -41,13 +41,15 @@ public class PasswordManagementView {
 	public int chosenOpption;
 	public int passwordTypeOpption;
 	
+	
+	
 	Scanner insert = new Scanner(System.in);
 	
 	 LocalDateTime currDateTime = LocalDateTime.now();
      DateTimeFormatter formate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	
 	public PasswordManagementView(UserAccount user, List<PasswordManagement> passwordList) {
-		if(user.getUserTypes().toLowerCase().equals("admin")) {
+//		if(user.getUserTypes().toLowerCase().equals("admin") ) {
 			System.out.println(" Please chose an opption's that you want to do for password Managing");
 			System.out.println(" 1 . Add");
 			System.out.println(" 2 . Update");
@@ -57,6 +59,7 @@ public class PasswordManagementView {
 			System.out.println(" 6 . Sort Passwords");
 			System.out.println(" 7 . Stop");
 			
+			int listSize = 0;
 			int opption;
 			PasswordManagement searchAPassword;
 			
@@ -87,6 +90,7 @@ public class PasswordManagementView {
 			    				System.out.println("Generated Password is, "+this.password);
 			    			}
 			    			else {
+			    				insert.nextLine();
 			    				System.out.println("Please Write down the password");
 			    				this.password = insert.nextLine();
 			    			}
@@ -110,6 +114,7 @@ public class PasswordManagementView {
 			    				System.out.println("Generated Password is, "+this.password);
 			    			}
 			    			else {
+			    				insert.nextLine();
 			    				System.out.println("Please Write down the password");
 			    				this.password = insert.nextLine();
 			    			}
@@ -132,6 +137,7 @@ public class PasswordManagementView {
 			    				System.out.println("Generated Password is, "+this.password);
 			    			}
 			    			else {
+			    				insert.nextLine();
 			    				System.out.println("Please Write down the password");
 			    				this.password = insert.nextLine();
 			    			}
@@ -163,7 +169,7 @@ public class PasswordManagementView {
 		    		case 1:
 		    			System.out.println(" Please write down website name");
 		    			this.updatesearchByName = insert.nextLine();
-		    			searchAPassword = search(this.updatesearchByName, passwordList);
+		    			searchAPassword = search(this.updatesearchByName, passwordList, user);
 		    			displaySinglePasswordDetails(searchAPassword);
 		    					    			    			
 		    			System.out.println(" Want to change name! 1. yes 2. no");
@@ -234,7 +240,7 @@ public class PasswordManagementView {
 		    		case 2:
 		    			System.out.println(" Please write down Desktop Application name");
 		    			this.updatesearchByName = insert.nextLine();
-		    			searchAPassword = search(this.updatesearchByName, passwordList);
+		    			searchAPassword = search(this.updatesearchByName, passwordList, user);
 		    			displaySinglePasswordDetails(searchAPassword);
 		    					    			    			
 		    			System.out.println(" Want to change name! 1. yes 2. no");
@@ -290,10 +296,11 @@ public class PasswordManagementView {
 		    			}
 		    		   		    		 	    			
 			    		break;
+			    		
 		    		case 3:
 		    			System.out.println(" Please write down game name");
 		    			this.updatesearchByName = insert.nextLine();
-		    			searchAPassword = search(this.updatesearchByName, passwordList);
+		    			searchAPassword = search(this.updatesearchByName, passwordList, user);
 		    			displaySinglePasswordDetails(searchAPassword);
 		    					    			    			
 		    			System.out.println(" Want to change name! 1. yes 2. no");
@@ -386,20 +393,20 @@ public class PasswordManagementView {
 					case 1:
 						System.out.println(" Please write down the name of website that you want to delete!");
 						this.deleteSearchByName = insert.nextLine();
-						searchAPassword = search(this.deleteSearchByName, passwordList);
+						searchAPassword = search(this.deleteSearchByName, passwordList, user);
 						this.type = searchAPassword.getType();
 						
 						break;
 					case 2:
 						System.out.println(" Please write down the name of Desktop Application that you want to delete!");
 						this.deleteSearchByName = insert.nextLine();
-						searchAPassword = search(this.deleteSearchByName, passwordList);
+						searchAPassword = search(this.deleteSearchByName, passwordList, user);
 						this.type = searchAPassword.getType();
 						break;
 					case 3:
 						System.out.println(" Please write down the name of Game that you want to delete!");
 						this.deleteSearchByName = insert.nextLine();
-						searchAPassword = search(this.deleteSearchByName, passwordList);
+						searchAPassword = search(this.deleteSearchByName, passwordList, user);
 						this.type = searchAPassword.getType();
 						break;
 					default:
@@ -411,13 +418,14 @@ public class PasswordManagementView {
 		    		
 //		    	case for display
 		    	case 4:
-		    		displayAllPasswordDetailsByHidingPassword(passwordList,user);
-		    		
-		    		System.out.println(" Want to display all details with password!! 1. Yes, 2. No");
-		    		if(insert.nextInt() == 1) {
-		    			insert.nextLine();
+		    		listSize = displayAllPasswordDetailsByHidingPassword(passwordList,user, listSize);
+		    		if(listSize > 0) {
+		    			System.out.println(" Want to display all details with password!! 1. Yes, 2. No");
+		    			if(insert.nextInt() == 1) {
+		    				insert.nextLine();
 		    			
-		    			displayAllPasswordDetails(passwordList,user);
+		    				displayAllPasswordDetails(passwordList,user);
+		    			}
 		    		}
 		    		
 		    		
@@ -428,7 +436,7 @@ public class PasswordManagementView {
 		    		System.out.println(" Please write down the name of Website/DeskTop Application/Game that passwords details "
 		    				+ "you are looking for.");
 	    			this.SearchByName = insert.nextLine();
-	    			searchAPassword = search(this.SearchByName, passwordList);
+	    			searchAPassword = search(this.SearchByName, passwordList, user);
 	    			displaySinglePasswordDetails(searchAPassword);
 		    		break;
 		    		
@@ -444,31 +452,33 @@ public class PasswordManagementView {
 		    	default:
 		    		
 			}
-			
-		}
+
 	}
-	   private PasswordManagement search(String searchCriteria, List<PasswordManagement> passwordList) {
+	   private PasswordManagement search(String searchCriteria, List<PasswordManagement> passwordList, UserAccount user) {
 	       
 	        for (PasswordManagement password : passwordList) {
-	        	// Check the type of password and call specific methods if needed
-	            if (password instanceof Website) {
+	        	if(password.getUser().getUserEmailAddress().equals(user.getUserEmailAddress()) || user.getUserTypes().toLowerCase().equals("admin") ) {
+	        		// Check the type of password and call specific methods if needed
+	        		if (password instanceof Website) {
 	            	
-	                if( ((Website) password).getWebsiteName().equalsIgnoreCase(searchCriteria)){
+	        			if( ((Website) password).getWebsiteName().equalsIgnoreCase(searchCriteria)){
 	                	
-	                	return password;
-	                }
+	        				return password;
+	        			}
 	            
-	            } else if (password instanceof DesktopApplication) {
-	                if( ((DesktopApplication) password).getApplicationName().equalsIgnoreCase(searchCriteria)){
+	        		} else if (password instanceof DesktopApplication) {
+	        			if( ((DesktopApplication) password).getApplicationName().equalsIgnoreCase(searchCriteria)){
 	                	
-	                	return password;
-	                }
-	            } else if (password instanceof Game) {
-	                if( ((Game) password).getGameName().equalsIgnoreCase(searchCriteria)){
+	        				return password;
+	        			}
+	        		} else if (password instanceof Game) {
+	        			if( ((Game) password).getGameName().equalsIgnoreCase(searchCriteria)){
 	                	
-	                	return password;
-	                }
-	            }
+	        				return password;
+	        			}
+	        		}
+	            
+	        	} 
 	        }
 	        return null; // Password not found
 	    }
@@ -518,7 +528,7 @@ public class PasswordManagementView {
 		   
 	   }
 	   
-	   private void displayAllPasswordDetailsByHidingPassword(List<PasswordManagement> passwordList, UserAccount user) {
+	   private int displayAllPasswordDetailsByHidingPassword(List<PasswordManagement> passwordList, UserAccount user, int listSize) {
 		   try {
 			 for(PasswordManagement password: passwordList) {
 				 if( password.getUser().getUserEmailAddress().toLowerCase().equals(user.getUserEmailAddress().toLowerCase()) || user.getUserTypes().toLowerCase().equals("admin")) {
@@ -532,7 +542,7 @@ public class PasswordManagementView {
 	    	        } else if (password instanceof Game) {
 	    	             ((Game) password).displayGameInfo();
 	    	        }
-	    	        
+	    	        listSize = listSize + 1;
 	    	        System.out.println("\t");
 				 }
 			 }
@@ -540,7 +550,7 @@ public class PasswordManagementView {
 		   }catch(Exception e) {
 			   System.out.println(e.getStackTrace());
 		   }
-		   
+		   return listSize;
 	   }
 	   
 	    // Decryption method

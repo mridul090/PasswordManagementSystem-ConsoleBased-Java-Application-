@@ -1,6 +1,8 @@
 package Models;
 
-public class EncryptionClass {
+import java.io.Serializable;
+
+public class EncryptionClass implements Serializable{
 	private String originalPassword;
 	private String encryptedPassword;
 	private String passwordTypeName;

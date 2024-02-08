@@ -82,7 +82,9 @@ public class PasswordManagementSystemController {
         					//Encrypt the password
         					encryptionPasswordList = loadAllEncryptedPassword(encryptionPasswordList);
         					encryptedPasswordCode = encryptPassword(passView.password);
+        					System.out.println(" Original Password "+ passView.password +" , Encrypted Password: "+encryptedPasswordCode);
         					encryptPassword = EncryptionClass.getEncryption(passView.password, encryptedPasswordCode, passView.websiteName);
+        					System.out.println(" Encrypted Object store Password: "+encryptPassword.getOriginalPassword()+" Encrypted: "+encryptPassword.getEncryptedPassword()+" Type Name: "+encryptPassword.getPasswordTypeName());
         					encryptionPasswordList.add(encryptPassword);
         					isEncryptedPasswordSave = SaveAllEncrypetedPasswords(encryptionPasswordList);
         					if(!isEncryptedPasswordSave) {

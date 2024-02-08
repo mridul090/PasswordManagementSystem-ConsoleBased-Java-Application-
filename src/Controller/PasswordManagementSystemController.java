@@ -176,7 +176,30 @@ public class PasswordManagementSystemController {
     							System.out.println("The website is need to update is "+ ((Website)passwordList.get(i)).getWebsiteName());
     							PasswordManagement passManager = passwordList.get(i);
         						passManager.setName(passView.name);;
-        						passManager.setPassword(passView.password);
+        						
+        						//Encrypt the password
+        						try {
+        							if(passView.isPasswordUpdated) {
+        	        					encryptionPasswordList = loadAllEncryptedPassword(encryptionPasswordList);
+        	        					encryptedPasswordCode = encryptPassword(passView.password);
+        	        					encryptionPasswordList = updateEncryptionList(encryptionPasswordList, passView.updatesearchByName, passView.password, encryptedPasswordCode, passView.websiteName );
+        	        					isEncryptedPasswordSave = SaveAllEncrypetedPasswords(encryptionPasswordList);
+        	        					if(isEncryptedPasswordSave != true) {
+        	        						throw new Exception("Password Can't Encrypted");
+        	        					}
+        	        					else {
+        	        						passManager.setPassword(encryptedPasswordCode);
+        	        					}
+        	        					
+        							}
+        							else {
+        								passManager.setPassword(passView.password);
+        							}
+        							
+        						}catch(Exception e) {
+        							System.out.println(e.getStackTrace());
+        						}
+        						        						
         						passManager.setDateOfCreate(passView.dateOfCreate);
         						passManager.setDateOfUpdate(passView.dateOfUpdate);
         						passManager.setUser(passView.user);
@@ -207,8 +230,31 @@ public class PasswordManagementSystemController {
     						if( ((DesktopApplication)passwordList.get(i)).getApplicationName().toLowerCase().equals(passView.updatesearchByName)) {
     							System.out.println("The Appilcaiton is need to update is "+ ((DesktopApplication)passwordList.get(i)).getApplicationName());
     							PasswordManagement passManager = passwordList.get(i);
-        						passManager.setName(passView.name);;
-        						passManager.setPassword(passView.password);
+        						passManager.setName(passView.name);
+        						
+        						//Encrypt the password
+        						try {
+        							if(passView.isPasswordUpdated) {
+        	        					encryptionPasswordList = loadAllEncryptedPassword(encryptionPasswordList);
+        	        					encryptedPasswordCode = encryptPassword(passView.password);
+        	        					encryptionPasswordList = updateEncryptionList(encryptionPasswordList, passView.updatesearchByName, passView.password, encryptedPasswordCode, passView.desktopApplication );
+        	        					isEncryptedPasswordSave = SaveAllEncrypetedPasswords(encryptionPasswordList);
+        	        					if(isEncryptedPasswordSave != true) {
+        	        						throw new Exception("Password Can't Encrypted");
+        	        					}
+        	        					else {
+        	        						passManager.setPassword(encryptedPasswordCode);
+        	        					}
+        	        					
+        							}
+        							else {
+        								passManager.setPassword(passView.password);
+        							}
+        							
+        						}catch(Exception e) {
+        							System.out.println(e.getStackTrace());
+        						}
+        						
         						passManager.setDateOfCreate(passView.dateOfCreate);
         						passManager.setDateOfUpdate(passView.dateOfUpdate);
         						passManager.setUser(passView.user);
@@ -236,17 +282,40 @@ public class PasswordManagementSystemController {
     				for (int i = 0; i < passwordList.size(); i++) {
     					if(passwordList.get(i).getType().toLowerCase().equals(passView.type)){
     			    		    			    		
-    						if( ((Website)passwordList.get(i)).getWebsiteName().toLowerCase().equals(passView.updatesearchByName)) {
-    							System.out.println("The website is need to update is "+ ((Website)passwordList.get(i)).getWebsiteName());
+    						if( ((Game)passwordList.get(i)).getGameName().toLowerCase().equals(passView.updatesearchByName)) {
+    							System.out.println("The Game is need to update is "+ ((Game)passwordList.get(i)).getGameName());
     							PasswordManagement passManager = passwordList.get(i);
-        						passManager.setName(passView.name);;
-        						passManager.setPassword(passView.password);
+        						passManager.setName(passView.name);
+        						
+        						//Encrypt the password
+        						try {
+        							if(passView.isPasswordUpdated) {
+        	        					encryptionPasswordList = loadAllEncryptedPassword(encryptionPasswordList);
+        	        					encryptedPasswordCode = encryptPassword(passView.password);
+        	        					encryptionPasswordList = updateEncryptionList(encryptionPasswordList, passView.updatesearchByName, passView.password, encryptedPasswordCode, passView.gameName );
+        	        					isEncryptedPasswordSave = SaveAllEncrypetedPasswords(encryptionPasswordList);
+        	        					if(isEncryptedPasswordSave != true) {
+        	        						throw new Exception("Password Can't Encrypted");
+        	        					}
+        	        					else {
+        	        						passManager.setPassword(encryptedPasswordCode);
+        	        					}
+        	        					
+        							}
+        							else {
+        								passManager.setPassword(passView.password);
+        							}
+        							
+        						}catch(Exception e) {
+        							System.out.println(e.getStackTrace());
+        						}
+        						
         						passManager.setDateOfCreate(passView.dateOfCreate);
         						passManager.setDateOfUpdate(passView.dateOfUpdate);
         						passManager.setUser(passView.user);
         						passManager.setType(passView.type);
-        						((Website)passManager).setWebsiteName(passView.websiteName);
-        						((Website)passManager).setWebsiteLink(passView.websiteLink);
+        						((Game)passManager).setGameName(passView.gameName);
+        						((Game)passManager).setGameDeveloper(passView.gameDeveloper);
         						
         						passwordList.set(i, passManager);
         						
@@ -476,6 +545,21 @@ public class PasswordManagementSystemController {
 			return false;
 		}
 
+    }
+    
+    public List<EncryptionClass> updateEncryptionList( List<EncryptionClass> encryptionPasswordList, String updatesearchByName, String password, String encryptedPasswordCode, String nameOfPlatfrom ){
+    	
+    	for (int i = 0; i < encryptionPasswordList.size(); i++) {
+			if(encryptionPasswordList.get(i).getPasswordTypeName().toLowerCase().equals(updatesearchByName)){
+				EncryptionClass encrypPass = encryptionPasswordList.get(i);
+				encrypPass.setOriginalPassword(password);
+				encrypPass.setEncryptedPassword(encryptedPasswordCode);
+				encrypPass.setPasswordTypeName(nameOfPlatfrom);
+				
+				encryptionPasswordList.set(i, encrypPass);
+			}
+    	}
+    	return encryptionPasswordList;
     }
     
     // Encryption method

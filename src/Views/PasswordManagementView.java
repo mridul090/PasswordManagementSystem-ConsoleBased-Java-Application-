@@ -29,6 +29,7 @@ public class PasswordManagementView {
 	
 	//For update
 	public String updatesearchByName = "";
+	public boolean isPasswordUpdated = false;
 	
 	//For delete
 	public String deleteSearchByName = "";
@@ -146,9 +147,11 @@ public class PasswordManagementView {
 		    			if(opption == 1) {
 		    				
 		    				this.password = insert.nextLine();
+		    				this.isPasswordUpdated = true;
 		    			}
 		    			else {
 		    				this.password = searchAPassword.getPassword();
+		    				this.isPasswordUpdated = false;
 		    			}
 		    			
 		    			this.dateOfCreate = searchAPassword.getDateOfCreate();
@@ -203,9 +206,11 @@ public class PasswordManagementView {
 		    			if(opption == 1) {
 		    				
 		    				this.password = insert.nextLine();
+		    				this.isPasswordUpdated = true;
 		    			}
 		    			else {
 		    				this.password = searchAPassword.getPassword();
+		    				this.isPasswordUpdated = false;
 		    			}
 		    			
 		    			this.dateOfCreate = searchAPassword.getDateOfCreate();
@@ -248,9 +253,11 @@ public class PasswordManagementView {
 		    			if(opption == 1) {
 		    				
 		    				this.password = insert.nextLine();
+		    				this.isPasswordUpdated = true;
 		    			}
 		    			else {
 		    				this.password = searchAPassword.getPassword();
+		    				this.isPasswordUpdated = false;
 		    			}
 		    			
 		    			this.dateOfCreate = searchAPassword.getDateOfCreate();

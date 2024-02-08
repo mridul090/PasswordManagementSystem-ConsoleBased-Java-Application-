@@ -25,7 +25,7 @@ public class UserSignUpOrLoginView {
 	
 	public UserSignUpOrLoginView UserSignUpOrLoginView(UserSignUpOrLoginView sign_lgin_view) {
 		System.out.println("\t\t\t Password Management System\n\n");
-		System.out.println(" Do you want to 1. logIn or 2. Register new User to this system");
+		System.out.println("Do you want to 1. logIn or 2. Register new User to this system. \nPlease chose an opption between 1 & 2.");
 		try {
 			sign_lgin_view.setChoseOption(input.nextInt());
 			input.nextLine();

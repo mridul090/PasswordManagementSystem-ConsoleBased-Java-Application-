@@ -5,6 +5,7 @@ import Models.Website;
 import Models.DesktopApplication;
 import Models.Game;
 import Models.UserAccount;
+import Models.EncryptionClass;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -53,9 +54,13 @@ class GamePasswordFactory implements PasswordManagementFactory {
 public class PasswordManagementSystemController {
 	// Using a single ArrayList to store different types of passwords
     List<PasswordManagement> passwordList = new ArrayList<>();
+    List<EncryptionClass> encryptionPasswordList = new ArrayList<>();
+    
     boolean wantToStop = false;
     boolean isPasswordSave = false;
-  
+    boolean isEncryptedPasswordSave = false;
+    EncryptionClass encryptPassword;
+    String encryptedPasswordCode;
     
     public PasswordManagementSystemController(UserAccount user){
     	System.out.println("The use is now "+user.getUserName());
@@ -72,41 +77,87 @@ public class PasswordManagementSystemController {
         			case 1:
         				passwordList = loadAllPasswords(passwordList);
         				PasswordManagementFactory websiteFactory = new WebsiteFactory();
-        				PasswordManagement websitePassword = websiteFactory.createPassword(passView.name, passView.password, passView.dateOfCreate, passView.dateOfUpdate, passView.user, passView.type, passView.websiteName, passView.websiteLink, passView.desktopApplication, passView.gameName, passView.gameDeveloper);
-        				passwordList.add(websitePassword);
-        				isPasswordSave = SaveAllPasswords(passwordList);
-        				if(isPasswordSave) {
-        					System.out.println("All data has been saved to data file");	
+        				
+        				try {
+        					//Encrypt the password
+        					encryptionPasswordList = loadAllEncryptedPassword(encryptionPasswordList);
+        					encryptedPasswordCode = encryptPassword(passView.password);
+        					encryptPassword = EncryptionClass.getEncryption(passView.password, encryptedPasswordCode, passView.websiteName);
+        					encryptionPasswordList.add(encryptPassword);
+        					isEncryptedPasswordSave = SaveAllEncrypetedPasswords(encryptionPasswordList);
+        					if(!isEncryptedPasswordSave) {
+        						throw new Exception("Password Can't Encrypted");
+        					}
+        				        						
+        					PasswordManagement websitePassword = websiteFactory.createPassword(passView.name, encryptedPasswordCode, passView.dateOfCreate, passView.dateOfUpdate, passView.user, passView.type, passView.websiteName, passView.websiteLink, passView.desktopApplication, passView.gameName, passView.gameDeveloper);
+        					passwordList.add(websitePassword);
+        					isPasswordSave = SaveAllPasswords(passwordList);
+        					if(isPasswordSave) {
+        						System.out.println("All data has been saved to data file");	
+        					}
+        					else {
+        						System.out.println("Unable to save!!");
+        					}
         				}
-        				else {
-        					System.out.println("Unable to save!!");
+        				catch(Exception e) {
+        					System.out.println(e.getStackTrace());
         				}
         				break;
-        			case 2:
+        			case 2:        				
         				passwordList = loadAllPasswords(passwordList);
         				PasswordManagementFactory deskApplicationFactory = new DesktopApplicationPasswordFactory();
-        				PasswordManagement deskApplicationPassword = deskApplicationFactory.createPassword(passView.name, passView.password, passView.dateOfCreate, passView.dateOfUpdate, passView.user, passView.type, passView.websiteName, passView.websiteLink, passView.desktopApplication, passView.gameName, passView.gameDeveloper);
-        				passwordList.add(deskApplicationPassword);
-        				isPasswordSave = SaveAllPasswords(passwordList);
-        				if(isPasswordSave) {
-        					System.out.println("All data has been saved to data file");	
+        				try {
+        					//Encrypt the password
+        					encryptionPasswordList = loadAllEncryptedPassword(encryptionPasswordList);
+        					encryptedPasswordCode = encryptPassword(passView.password);
+        					encryptPassword = EncryptionClass.getEncryption(passView.password, encryptedPasswordCode, passView.desktopApplication);
+        					encryptionPasswordList.add(encryptPassword);
+        					isEncryptedPasswordSave = SaveAllEncrypetedPasswords(encryptionPasswordList);
+        					if(!isEncryptedPasswordSave) {
+        						throw new Exception("Password Can't Encrypted");
+        					}
+        					
+        					PasswordManagement deskApplicationPassword = deskApplicationFactory.createPassword(passView.name, passView.password, passView.dateOfCreate, passView.dateOfUpdate, passView.user, passView.type, passView.websiteName, passView.websiteLink, passView.desktopApplication, passView.gameName, passView.gameDeveloper);
+        					passwordList.add(deskApplicationPassword);
+        					isPasswordSave = SaveAllPasswords(passwordList);
+        					if(isPasswordSave) {
+        						System.out.println("All data has been saved to data file");	
+        					}
+        					else {
+        						System.out.println("Unable to save!!");
+        					}
         				}
-        				else {
-        					System.out.println("Unable to save!!");
-        				}
+        				catch(Exception e) {
+        					System.out.println(e.getStackTrace());
+        				}	
         				break;
         			case 3:
         				passwordList = loadAllPasswords(passwordList);
         				PasswordManagementFactory gameFactory = new GamePasswordFactory();
-        				PasswordManagement gamePassword = gameFactory.createPassword(passView.name, passView.password, passView.dateOfCreate, passView.dateOfUpdate, passView.user, passView.type, passView.websiteName, passView.websiteLink, passView.desktopApplication, passView.gameName, passView.gameDeveloper);
-        				passwordList.add(gamePassword);
-        				isPasswordSave = SaveAllPasswords(passwordList);
-        				if(isPasswordSave) {
-        					System.out.println("All data has been saved to data file");	
+        				try {
+        					//Encrypt the password
+        					encryptionPasswordList = loadAllEncryptedPassword(encryptionPasswordList);
+        					encryptedPasswordCode = encryptPassword(passView.password);
+        					encryptPassword = EncryptionClass.getEncryption(passView.password, encryptedPasswordCode, passView.gameName);
+        					encryptionPasswordList.add(encryptPassword);
+        					isEncryptedPasswordSave = SaveAllEncrypetedPasswords(encryptionPasswordList);
+        					if(!isEncryptedPasswordSave) {
+        						throw new Exception("Password Can't Encrypted");
+        					}        					        				
+        				
+        					PasswordManagement gamePassword = gameFactory.createPassword(passView.name, passView.password, passView.dateOfCreate, passView.dateOfUpdate, passView.user, passView.type, passView.websiteName, passView.websiteLink, passView.desktopApplication, passView.gameName, passView.gameDeveloper);
+        					passwordList.add(gamePassword);
+        					isPasswordSave = SaveAllPasswords(passwordList);
+        					if(isPasswordSave) {
+        						System.out.println("All data has been saved to data file");	
+        					}
+        					else {
+        						System.out.println("Unable to save!!");
+        					}
         				}
-        				else {
-        					System.out.println("Unable to save!!");
-        				}
+        				catch(Exception e) {
+        					System.out.println(e.getStackTrace());
+        				}	
         				break;
         			default:
         				System.out.println(" ");
@@ -385,6 +436,78 @@ public class PasswordManagementSystemController {
 			return false;
 		}
 
+    }
+    
+    
+    public List<EncryptionClass> loadAllEncryptedPassword(List<EncryptionClass> encrypPassList) {
+		try {
+			FileInputStream loadAllPasswords = new FileInputStream("PasswordManagementDataFiles/StoreEncryptedAndDecryptedPassword.txt");
+			ObjectInputStream loadAllPasswordsObjectData = new ObjectInputStream(loadAllPasswords);
+			
+			encrypPassList = (List<EncryptionClass>)loadAllPasswordsObjectData.readObject();
+			
+			loadAllPasswordsObjectData.close();
+			loadAllPasswords.close();
+			
+		} catch (Exception e) {
+			
+			System.out.println(e.getStackTrace());
+		}
+
+    	return encrypPassList;
+    }
+    
+   
+    public boolean SaveAllEncrypetedPasswords(List<EncryptionClass> encrypPassList) {
+		try {
+			
+				FileOutputStream SaveAllPasswords = new FileOutputStream("PasswordManagementDataFiles/StoreEncryptedAndDecryptedPassword.txt");
+				ObjectOutputStream SaveAllPasswordsObjectData = new ObjectOutputStream(SaveAllPasswords);
+			
+				SaveAllPasswordsObjectData.writeObject(encrypPassList);
+				SaveAllPasswordsObjectData.flush();
+				SaveAllPasswordsObjectData.close();
+				SaveAllPasswords.close();
+			
+				return true;
+			
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+			return false;
+		}
+
+    }
+    
+    // Encryption method
+    public static String encryptPassword(String originalPassword) {
+        StringBuilder encryptedResult = new StringBuilder();
+
+        for (char c : originalPassword.toCharArray()) {
+            int asciiValue = (int) c;
+            int encryptedAsciiValue = asciiValue + 5;
+            encryptedResult.append(encryptedAsciiValue).append(",");
+        }
+
+        // Remove the trailing comma
+        if (encryptedResult.length() > 0) {
+            encryptedResult.deleteCharAt(encryptedResult.length() - 1);
+        }
+
+        return encryptedResult.toString();
+    }
+    
+    // Decryption method
+    public static String decryptPassword(String encryptedPasswords) {
+        StringBuilder decryptedResult = new StringBuilder();
+        String[] asciiValues = encryptedPasswords.split(",");
+
+        for (String ascii : asciiValues) {
+            int encryptedAsciiValue = Integer.parseInt(ascii);
+            int originalAsciiValue = encryptedAsciiValue - 5;
+            decryptedResult.append((char) originalAsciiValue);
+        }
+
+        return decryptedResult.toString();
     }
     
 }

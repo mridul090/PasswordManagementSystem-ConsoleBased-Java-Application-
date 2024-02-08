@@ -22,8 +22,9 @@ public class PasswordManagement implements Serializable{
     
     // Common methods for Password class
     public void displayInfo() {
-        System.out.println("Password Information: " + name + ", Created: " + dateOfCreate + ", Updated: " + dateOfUpdate);
+        System.out.println("Password Information: " + name +" Password: ***...." +", Created: " + dateOfCreate + ", Updated: " + dateOfUpdate);
     }
+   
 
 	public String getName() {
 		return name;

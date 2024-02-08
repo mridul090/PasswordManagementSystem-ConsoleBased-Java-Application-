@@ -1,6 +1,7 @@
 package Views;
 
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -29,7 +30,13 @@ public class PasswordManagementView {
 	
 	//For update
 	public String updatesearchByName = "";
-
+	public boolean isPasswordUpdated = false;
+	
+	//For delete
+	public String deleteSearchByName = "";
+	
+	//For search
+	public String SearchByName = "";
 	
 	public int chosenOpption;
 	public int passwordTypeOpption;
@@ -47,11 +54,17 @@ public class PasswordManagementView {
 			System.out.println(" 3 . Delete");
 			System.out.println(" 4 . Display All");
 			System.out.println(" 5 . Search");
-			System.out.println(" 6 . Stop");
+			System.out.println(" 6 . Sort Passwords");
+			System.out.println(" 7 . Stop");
+			
+			int opption;
+			PasswordManagement searchAPassword;
+			
 			this.chosenOpption = insert.nextInt();
 			insert.nextLine();
-			
+								
 			switch (this.chosenOpption) {
+//				Case for add
 		    	case 1:
 		    		// Code to be executed if expression matches value1
 		    		System.out.println(" Please chose an opption's to add a specific types of password");
@@ -60,11 +73,24 @@ public class PasswordManagementView {
 		    		System.out.println(" 3. Game");
 		    		this.passwordTypeOpption = insert.nextInt();
 					insert.nextLine();
+					
+					
 					switch (this.passwordTypeOpption) {
 			    		case 1:
 			    			System.out.println(" Please write down name, passwrod,website name, website link");
 			    			this.name = insert.nextLine();
-			    			this.password = insert.nextLine();
+			    			System.out.println("Do you want to auto generate Password? 1. Yes, 2. No");
+			    			if(insert.nextInt() == 1) {	
+			    				insert.nextLine();
+			    				
+			    				this.password = generatePassword();
+			    				System.out.println("Generated Password is, "+this.password);
+			    			}
+			    			else {
+			    				System.out.println("Please Write down the password");
+			    				this.password = insert.nextLine();
+			    			}
+			    			
 			    			this.dateOfCreate = currDateTime.format(formate);
 			    			this.dateOfUpdate = currDateTime.format(formate);
 			    			this.user = user;
@@ -75,7 +101,19 @@ public class PasswordManagementView {
 			    		case 2:
 			    			System.out.println(" Please write down name, passwrod, Application");
 			    			this.name = insert.nextLine();
-			    			this.password = insert.nextLine();
+			    			
+			    			System.out.println("Do you want to auto generate Password? 1. Yes, 2. No");
+			    			if(insert.nextInt() == 1) {	
+			    				insert.nextLine();
+			    				
+			    				this.password = generatePassword();
+			    				System.out.println("Generated Password is, "+this.password);
+			    			}
+			    			else {
+			    				System.out.println("Please Write down the password");
+			    				this.password = insert.nextLine();
+			    			}
+			    			
 			    			this.dateOfCreate = currDateTime.format(formate);
 			    			this.dateOfUpdate = currDateTime.format(formate);
 			    			this.user = user;
@@ -85,7 +123,19 @@ public class PasswordManagementView {
 			    		case 3:
 			    			System.out.println(" Please write down name, passwrod, Game Name, Game Developer");
 			    			this.name = insert.nextLine();
-			    			this.password = insert.nextLine();
+
+			    			System.out.println("Do you want to auto generate Password? 1. Yes, 2. No");
+			    			if(insert.nextInt() == 1) {	
+			    				insert.nextLine();
+			    				
+			    				this.password = generatePassword();
+			    				System.out.println("Generated Password is, "+this.password);
+			    			}
+			    			else {
+			    				System.out.println("Please Write down the password");
+			    				this.password = insert.nextLine();
+			    			}
+			    			
 			    			this.dateOfCreate = currDateTime.format(formate);
 			    			this.dateOfUpdate = currDateTime.format(formate);
 			    			this.user = user;
@@ -98,7 +148,7 @@ public class PasswordManagementView {
 					}
 		    		
 		    		break;
-		    	
+//		    	case for update
 		    	case 2:
 		    		// Code to be executed if expression matches value1
 		    		System.out.println(" Please chose an opption's to Update a specific types of password");
@@ -108,9 +158,7 @@ public class PasswordManagementView {
 		    		this.passwordTypeOpption = insert.nextInt();
 					insert.nextLine();
 					
-					int opption;
-					PasswordManagement searchAPassword;
-					
+					try {
 					switch (this.passwordTypeOpption) {
 		    		case 1:
 		    			System.out.println(" Please write down website name");
@@ -134,10 +182,24 @@ public class PasswordManagementView {
 		    			insert.nextLine();
 		    			if(opption == 1) {
 		    				
-		    				this.password = insert.nextLine();
+
+			    			System.out.println("Do you want to auto generate Password? 1. Yes, 2. No");
+			    			if(insert.nextInt() == 1) {	
+			    				insert.nextLine();
+			    				
+			    				this.password = generatePassword();
+			    				System.out.println("Generated Password is, "+this.password);
+			    			}
+			    			else {
+			    				System.out.println("Please Write down the password");
+			    				this.password = insert.nextLine();
+			    			}
+			    			
+		    				this.isPasswordUpdated = true;
 		    			}
 		    			else {
 		    				this.password = searchAPassword.getPassword();
+		    				this.isPasswordUpdated = false;
 		    			}
 		    			
 		    			this.dateOfCreate = searchAPassword.getDateOfCreate();
@@ -191,10 +253,24 @@ public class PasswordManagementView {
 		    			insert.nextLine();
 		    			if(opption == 1) {
 		    				
-		    				this.password = insert.nextLine();
+
+			    			System.out.println("Do you want to auto generate Password? 1. Yes, 2. No");
+			    			if(insert.nextInt() == 1) {	
+			    				insert.nextLine();
+			    				
+			    				this.password = generatePassword();
+			    				System.out.println("Generated Password is, "+this.password);
+			    			}
+			    			else {
+			    				System.out.println("Please Write down the password");
+			    				this.password = insert.nextLine();
+			    			}
+			    			
+		    				this.isPasswordUpdated = true;
 		    			}
 		    			else {
 		    				this.password = searchAPassword.getPassword();
+		    				this.isPasswordUpdated = false;
 		    			}
 		    			
 		    			this.dateOfCreate = searchAPassword.getDateOfCreate();
@@ -236,10 +312,24 @@ public class PasswordManagementView {
 		    			insert.nextLine();
 		    			if(opption == 1) {
 		    				
-		    				this.password = insert.nextLine();
+
+			    			System.out.println("Do you want to auto generate Password? 1. Yes, 2. No");
+			    			if(insert.nextInt() == 1) {	
+			    				insert.nextLine();
+			    				
+			    				this.password = generatePassword();
+			    				System.out.println("Generated Password is, "+this.password);
+			    			}
+			    			else {
+			    				System.out.println("Please Write down the password");
+			    				this.password = insert.nextLine();
+			    			}
+			    			
+		    				this.isPasswordUpdated = true;
 		    			}
 		    			else {
 		    				this.password = searchAPassword.getPassword();
+		    				this.isPasswordUpdated = false;
 		    			}
 		    			
 		    			this.dateOfCreate = searchAPassword.getDateOfCreate();
@@ -275,20 +365,80 @@ public class PasswordManagementView {
 			    	default:
 			    		System.out.println(" you have chosen an invalid opptions");
 					}
+					}
+					catch(Exception e){
+						System.out.println(e.getStackTrace());
+					}
 					
 		    		break;
 		    		
+//		    	case for delete
 		    	case 3:
-		    		// Code to be executed if expression matches value2
+		    		// Code to be executed if expression matches value1
+		    		System.out.println(" Please chose an opption's to Delete a specific types of password");
+		    		System.out.println(" 1. Website");
+		    		System.out.println(" 2. Desktop Application");
+		    		System.out.println(" 3. Game");
+		    		this.passwordTypeOpption = insert.nextInt();
+					insert.nextLine();
+					
+					switch (this.passwordTypeOpption) {
+					case 1:
+						System.out.println(" Please write down the name of website that you want to delete!");
+						this.deleteSearchByName = insert.nextLine();
+						searchAPassword = search(this.deleteSearchByName, passwordList);
+						this.type = searchAPassword.getType();
+						
+						break;
+					case 2:
+						System.out.println(" Please write down the name of Desktop Application that you want to delete!");
+						this.deleteSearchByName = insert.nextLine();
+						searchAPassword = search(this.deleteSearchByName, passwordList);
+						this.type = searchAPassword.getType();
+						break;
+					case 3:
+						System.out.println(" Please write down the name of Game that you want to delete!");
+						this.deleteSearchByName = insert.nextLine();
+						searchAPassword = search(this.deleteSearchByName, passwordList);
+						this.type = searchAPassword.getType();
+						break;
+					default:
+						System.out.println("");
+						
+					}
+		    		
 		    		break;
 		    		
+//		    	case for display
 		    	case 4:
-		    		displayAllPasswordDetails(passwordList,user);
-		    		break;
-		    	case 5:
+		    		displayAllPasswordDetailsByHidingPassword(passwordList,user);
+		    		
+		    		System.out.println(" Want to display all details with password!! 1. Yes, 2. No");
+		    		if(insert.nextInt() == 1) {
+		    			insert.nextLine();
+		    			
+		    			displayAllPasswordDetails(passwordList,user);
+		    		}
+		    		
 		    		
 		    		break;
-		    	case 6:
+		    		
+//		    	case for search
+		    	case 5:		
+		    		System.out.println(" Please write down the name of Website/DeskTop Application/Game that passwords details "
+		    				+ "you are looking for.");
+	    			this.SearchByName = insert.nextLine();
+	    			searchAPassword = search(this.SearchByName, passwordList);
+	    			displaySinglePasswordDetails(searchAPassword);
+		    		break;
+		    		
+//			    case for sort
+			    case 6:
+			    	
+			    	break;
+			    	
+//		    	case for stop
+		    	case 7:
 		    		this.wellstop = true;
 		    		break;
 		    	default:
@@ -346,7 +496,8 @@ public class PasswordManagementView {
 		   try {
 			 for(PasswordManagement password: passwordList) {
 				 if( password.getUser().getUserEmailAddress().toLowerCase().equals(user.getUserEmailAddress().toLowerCase()) || user.getUserTypes().toLowerCase().equals("admin")) {
-					 password.displayInfo();
+					String realPassword = decryptPassword(password.getPassword());
+					System.out.println("Password Information: " + password.getName() + " Password: " + realPassword +", Created: " + password.getDateOfCreate() + ", Updated: " + password.getDateOfUpdate());
 
 					// Check the type of password and call specific methods if needed
 	    	        if (password instanceof Website) {
@@ -355,7 +506,9 @@ public class PasswordManagementView {
 	    	             ((DesktopApplication) password).displayApplicationInfo();
 	    	        } else if (password instanceof Game) {
 	    	             ((Game) password).displayGameInfo();
-	    	        }					 
+	    	        }
+	    	        
+	    	        System.out.println("\t");
 				 }
 			 }
 			
@@ -364,4 +517,60 @@ public class PasswordManagementView {
 		   }
 		   
 	   }
+	   
+	   private void displayAllPasswordDetailsByHidingPassword(List<PasswordManagement> passwordList, UserAccount user) {
+		   try {
+			 for(PasswordManagement password: passwordList) {
+				 if( password.getUser().getUserEmailAddress().toLowerCase().equals(user.getUserEmailAddress().toLowerCase()) || user.getUserTypes().toLowerCase().equals("admin")) {
+					 password.displayInfo();;;
+
+					// Check the type of password and call specific methods if needed
+	    	        if (password instanceof Website) {
+	    	             ((Website) password).displayWebsiteInfo();
+	    	        } else if (password instanceof DesktopApplication) {
+	    	             ((DesktopApplication) password).displayApplicationInfo();
+	    	        } else if (password instanceof Game) {
+	    	             ((Game) password).displayGameInfo();
+	    	        }
+	    	        
+	    	        System.out.println("\t");
+				 }
+			 }
+			
+		   }catch(Exception e) {
+			   System.out.println(e.getStackTrace());
+		   }
+		   
+	   }
+	   
+	    // Decryption method
+	    public static String decryptPassword(String encryptedPasswords) {
+	        StringBuilder decryptedResult = new StringBuilder();
+	        String[] asciiValues = encryptedPasswords.split(",");
+
+	        for (String ascii : asciiValues) {
+	            int encryptedAsciiValue = Integer.parseInt(ascii);
+	            int originalAsciiValue = encryptedAsciiValue - 5;
+	            decryptedResult.append((char) originalAsciiValue);
+	        }
+
+	        return decryptedResult.toString();
+	    }
+	   
+	   private String generatePassword() {
+		    String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		    String num = "0123456789";
+		    String specialChar = "!@#%";
+		    String combination = upper + upper.toLowerCase() + num + specialChar;
+		    int len = 6;
+		    StringBuilder sb = new StringBuilder();
+		    for (int i = 0; i < len; i++) {
+		        sb.append(combination.charAt(
+		                ThreadLocalRandom.current().nextInt(
+		                        combination.length()
+		                )
+		        ));
+		    }
+		    return sb.toString();
+		}
 }

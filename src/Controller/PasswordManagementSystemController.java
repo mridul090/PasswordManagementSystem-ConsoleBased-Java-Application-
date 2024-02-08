@@ -448,21 +448,21 @@ public class PasswordManagementSystemController {
     				wantToStop = true;
     				
     			}
-    	        // Displaying information for all passwords in the list
-    	        for (PasswordManagement password : passwordList) {
-    	            password.displayInfo();
-
-    	            // Check the type of password and call specific methods if needed
-    	            if (password instanceof Website) {
-    	                ((Website) password).displayWebsiteInfo();
-    	            } else if (password instanceof DesktopApplication) {
-    	                ((DesktopApplication) password).displayApplicationInfo();
-    	            } else if (password instanceof Game) {
-    	                ((Game) password).displayGameInfo();
-    	            }
-
-    	            System.out.println(); // Separator between passwords
-    	        }
+//    	        // Displaying information for all passwords in the list
+//    	        for (PasswordManagement password : passwordList) {
+//    	            password.displayInfo();
+//
+//    	            // Check the type of password and call specific methods if needed
+//    	            if (password instanceof Website) {
+//    	                ((Website) password).displayWebsiteInfo();
+//    	            } else if (password instanceof DesktopApplication) {
+//    	                ((DesktopApplication) password).displayApplicationInfo();
+//    	            } else if (password instanceof Game) {
+//    	                ((Game) password).displayGameInfo();
+//    	            }
+//
+//    	            System.out.println(); // Separator between passwords
+//    	        }
     	        
     			break;
     		default:
